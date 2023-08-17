@@ -16,7 +16,7 @@ public class ClientController {
     private ClientService clientService;
 
     @PostMapping("/clientProduct")
-    public ResponseEntity<RefProductRequestDTO> saveProduct(@RequestBody RefProductRequestDTO refProductRequestDTO){
+    public ResponseEntity<RefProductRequestDTO> saveRefProduct(@RequestBody RefProductRequestDTO refProductRequestDTO){
         clientService.saveProduct(refProductRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(refProductRequestDTO);
     }
