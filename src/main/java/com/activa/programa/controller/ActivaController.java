@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -16,13 +17,13 @@ public class ActivaController {
     private ActivaService activaService;
 
     @PostMapping("/product")
-    public ResponseEntity<ProductRequestDTO> saveProduct(ProductRequestDTO productRequestDTO){
+    public ResponseEntity<ProductRequestDTO> saveProduct(@RequestBody ProductRequestDTO productRequestDTO){
         activaService.createProduct(productRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(productRequestDTO);
     }
 
     @PostMapping("/line")
-    public ResponseEntity<LineTypeRequestDTO> saveLineType(LineTypeRequestDTO lineTypeRequestDTO){
+    public ResponseEntity<LineTypeRequestDTO> saveLineType(@RequestBody LineTypeRequestDTO lineTypeRequestDTO){
         activaService.createLineType(lineTypeRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(lineTypeRequestDTO);
     }
