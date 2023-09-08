@@ -1,16 +1,9 @@
 package com.activa.programa.service;
 
+import com.activa.programa.dto.ClientRequestDTO;
 import com.activa.programa.dto.RefProductRequestDTO;
-import com.activa.programa.model.LineTypeModel;
-import com.activa.programa.model.MeasurementModel;
-import com.activa.programa.model.ProductModel;
-import com.activa.programa.model.RefProductModel;
-import com.activa.programa.model.SizeModel;
-import com.activa.programa.repository.ILineTypeRepository;
-import com.activa.programa.repository.IMeasurementRepository;
-import com.activa.programa.repository.IProductRepository;
-import com.activa.programa.repository.IRefProductRepository;
-import com.activa.programa.repository.ISizeRepository;
+import com.activa.programa.model.*;
+import com.activa.programa.repository.*;
 import com.activa.programa.service.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +29,9 @@ public class ClientService {
     @Autowired
     private ProductMapper productMapper;
 
+    @Autowired
+    private ClientRepository clientRepository;
+
     public RefProductModel saveProduct(RefProductRequestDTO refProductDTO){
 
         ProductModel productModel = productRepository.findByNombre(refProductDTO.getNombreProducto());
@@ -56,4 +52,10 @@ public class ClientService {
         return refProductRepository.save(refProductModel);
 
     }
+
+    public ClientModel insertClientData(ClientRequestDTO clientRequestDTO){
+        ClientModel clientModel = productMapper.mapToClientModel(clientRequestDTO);
+        return clientRepository.save(clientModel);
+    }
+
 }

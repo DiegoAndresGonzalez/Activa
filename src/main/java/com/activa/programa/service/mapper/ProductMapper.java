@@ -1,13 +1,7 @@
 package com.activa.programa.service.mapper;
 
-import com.activa.programa.dto.LineTypeRequestDTO;
-import com.activa.programa.dto.ProductRequestDTO;
-import com.activa.programa.dto.RefProductRequestDTO;
-import com.activa.programa.model.LineTypeModel;
-import com.activa.programa.model.MeasurementModel;
-import com.activa.programa.model.ProductModel;
-import com.activa.programa.model.RefProductModel;
-import com.activa.programa.model.SizeModel;
+import com.activa.programa.dto.*;
+import com.activa.programa.model.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -25,5 +19,8 @@ public interface ProductMapper {
     @Mapping(target = "observaciones", source = "observacionesTalla")
     @Mapping(target = "especificaciones", source = "especificacionesTalla")
     SizeModel mapToSizeDTO(RefProductRequestDTO refProductRequestDTO);
+
+    ClientModel mapToClientModel(ClientRequestDTO clientRequestDTO);
+    ClientResponseDTO mapToClientResponse(ClientModel clientModel);
 
 }
