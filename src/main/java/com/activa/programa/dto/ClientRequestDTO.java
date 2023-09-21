@@ -1,5 +1,6 @@
 package com.activa.programa.dto;
 
+import com.activa.programa.model.UserModel;
 import lombok.*;
 
 @Getter

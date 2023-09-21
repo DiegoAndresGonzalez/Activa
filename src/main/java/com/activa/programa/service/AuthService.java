@@ -7,51 +7,71 @@ import com.activa.programa.model.RoleModel;
 import com.activa.programa.model.UserModel;
 import com.activa.programa.repository.UserModelRepository;
 import com.activa.programa.service.mapper.ProductMapper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
-@RequiredArgsConstructor
 public class AuthService {
 
     @Autowired
-    private final UserModelRepository userRepository;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    private final JwtService jwtService;
+    private UserModelRepository userModelRepository;
 
     @Autowired
-    private final AuthenticationManager authenticationManager;
+    private JwtService jwtService;
 
     @Autowired
-    private final PasswordEncoder passwordEncoder;
+    private ProductMapper productMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public AuthResponse login(LoginRequestDTO loginRequestDTO){
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginRequestDTO.getUsername(), loginRequestDTO.getPassword()));
-        UserDetails userDetails = userRepository.findByUsername(loginRequestDTO.getUsername())
-                .orElseThrow();
-        String token = jwtService.getToken(userDetails);
-        return AuthResponse.builder()
-                .token(token)
-                .build();
+
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                loginRequestDTO.getUsername(), loginRequestDTO.getPassword()
+        );
+        authenticationManager.authenticate(authenticationToken);
+        UserModel userModel = userModelRepository.findByUsername(loginRequestDTO.getUsername())
+                .orElseThrow(() -> new RuntimeException("El usuario no fue encontrado."));
+
+        String jwt = jwtService.generateToken(userModel, generateExtraClaims(userModel));
+
+        return new AuthResponse(jwt);
     }
 
     public AuthResponse register(RegisterRequestDTO registerRequestDTO){
-        UserModel userModel = UserModel.builder()
-                .username(registerRequestDTO.getUsername())
-                .password(passwordEncoder.encode(registerRequestDTO.getPassword()))
-                        .roleModel(RoleModel.USER)
-                .build();
-        userRepository.save(userModel);
-        return AuthResponse.builder()
-                .token(jwtService.getToken(userModel))
-                .build();
+        if (userModelRepository.findByUsername(registerRequestDTO.getUsername()).isPresent()){
+            throw new RuntimeException("El usuario ya existe.");
+        }
+        UserModel newUser = productMapper.mapToUserModel(registerRequestDTO);
+        newUser.setPassword(passwordEncoder.encode(registerRequestDTO.getPassword()));
+        newUser.setRoleModel(RoleModel.USER);
+        String jwt = jwtService.generateToken(newUser, generateExtraClaims(newUser));
+        userModelRepository.save(newUser);
+
+        AuthResponse response = new AuthResponse();
+        response.setToken(jwt);
+
+        return response;
     }
+
+    public Map<String, Object> generateExtraClaims(UserModel userModel){
+        Map<String,Object> extraClaims = new HashMap<>();
+        extraClaims.put("name", userModel.getUsername());
+        extraClaims.put("role", userModel.getRoleModel().name());
+
+        return extraClaims;
+    }
+
+
+
 }

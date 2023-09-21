@@ -7,6 +7,8 @@ import com.activa.programa.model.ClientModel;
 import com.activa.programa.service.ClientService;
 import com.activa.programa.service.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
+import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,21 +31,18 @@ public class ClientController {
     @Autowired
     private ProductMapper productMapper;
 
-
     @PostMapping("/clientProduct")
     public ResponseEntity<RefProductRequestDTO> saveRefProduct(@RequestBody RefProductRequestDTO refProductRequestDTO){
         clientService.saveProduct(refProductRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(refProductRequestDTO);
     }
 
-    @PostMapping(value = "clientData")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<String> saveClientData(@RequestBody ClientRequestDTO clientRequestDTO){
+    @PreAuthorize("hasAuthority('SAVE_ONE_PRODUCT')")
+    @PostMapping("/clientData")
+    public ResponseEntity<ClientResponseDTO> saveClientData(@RequestBody ClientRequestDTO clientRequestDTO){
         ClientModel savedClient = clientService.insertClientData(clientRequestDTO);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
         ClientResponseDTO clientResponseDTO = productMapper.mapToClientResponse(savedClient);
-        return ResponseEntity.ok("Guardado");
+        return ResponseEntity.status(HttpStatus.CREATED).body(clientResponseDTO);
     }
 
 }
