@@ -3,7 +3,6 @@ package com.activa.programa.security;
 import com.activa.programa.model.UserModel;
 import com.activa.programa.repository.UserModelRepository;
 import com.activa.programa.service.JwtService;
-import io.jsonwebtoken.Jwt;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

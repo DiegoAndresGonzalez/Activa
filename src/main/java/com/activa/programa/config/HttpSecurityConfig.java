@@ -15,7 +15,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.security.Permission;
 
 @Configuration
 @EnableWebSecurity
@@ -38,9 +37,11 @@ public class HttpSecurityConfig {
                 .authorizeHttpRequests(authConfig -> {
                     authConfig.requestMatchers(HttpMethod.POST, "/auth/login").permitAll();
                     authConfig.requestMatchers(HttpMethod.POST, "/auth/register").permitAll();
+                    authConfig.requestMatchers(HttpMethod.POST,"/product").permitAll();
+                    authConfig.requestMatchers(HttpMethod.POST,"line").permitAll();
+                    authConfig.requestMatchers(HttpMethod.POST,"/api/clientProduct").permitAll();
                     authConfig.requestMatchers(HttpMethod.POST, "/api/clientData").hasAuthority(PermissionSecurity.SAVE_ONE_PRODUCT.name());
                     authConfig.anyRequest().denyAll();
-
                 });
         return httpSecurity.build();
     }

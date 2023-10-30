@@ -23,17 +23,12 @@ public class ActivaService {
     private ILineTypeRepository lineTypeRepository;
 
     public ProductModel createProduct(ProductRequestDTO productRequest){
-
         ProductModel productModel = productMapper.mapToProductDTO(productRequest);
         return productRepository.save(productModel);
-
     }
 
     public LineTypeModel createLineType(LineTypeRequestDTO lineTypeRequest){
-
         LineTypeModel lineTypeModel = productMapper.mapToLineTypeDTO(lineTypeRequest);
         return lineTypeRepository.save(lineTypeModel);
-
     }
-
 }

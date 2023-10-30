@@ -29,9 +29,4 @@ public class ActivaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(lineTypeRequestDTO);
     }
 
-    @GetMapping("/login")
-    public String loginForm(){
-        return "login";
-    }
-
 }

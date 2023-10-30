@@ -2,7 +2,6 @@ package com.activa.programa.config;
 
 import com.activa.programa.repository.UserModelRepository;
 import lombok.RequiredArgsConstructor;
-import org.antlr.v4.runtime.RuleContextWithAltNum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;

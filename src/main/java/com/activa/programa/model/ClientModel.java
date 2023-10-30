@@ -22,6 +22,7 @@ public class ClientModel {
     private String nombre;
     private String apellido;
     private String direccion;
+    private String ciudad;
     private String contacto;
     private Integer telefono;
 

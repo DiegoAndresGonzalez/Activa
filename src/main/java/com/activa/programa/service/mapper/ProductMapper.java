@@ -22,7 +22,6 @@ public interface ProductMapper {
 
     ClientModel mapToClientModel(ClientRequestDTO clientRequestDTO);
     ClientResponseDTO mapToClientResponse(ClientModel clientModel);
-
     UserModel mapToUserModel(RegisterRequestDTO registerRequestDTO);
 
 }
